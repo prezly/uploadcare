@@ -1,6 +1,6 @@
 {
     "name": "@prezly/uploadcare",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "Uploadcare utilities used at Prezly",
     "license": "MIT",
     "main": "build/index.js",
