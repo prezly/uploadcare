@@ -13,7 +13,7 @@ module.exports = {
     },
     devtool: 'source-map',
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
     },
     module: {
         rules: [
@@ -21,7 +21,7 @@ module.exports = {
                 test: /\.ts$/,
                 use: 'ts-loader',
                 exclude: /node_modules/,
-            }
+            },
         ],
     },
 };
