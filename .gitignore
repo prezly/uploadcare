@@ -1,5 +1,6 @@
 .next/
 build/
+umd/
 dist/
 coverage/
 node_modules/
