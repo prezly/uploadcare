@@ -7,9 +7,10 @@ module.exports = {
     entry: './src/index.ts',
     output: {
         path: path.join(__dirname, 'umd'),
-        globalObject: 'this',
-        libraryTarget: 'umd',
-        library: 'prezlyUploadcare',
+        library: {
+            name: 'PrezlyUploadcare',
+            type: 'umd',
+        },
     },
     devtool: 'source-map',
     resolve: {
