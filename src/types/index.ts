@@ -1,4 +1,4 @@
-export { default as PrezlyFileInfo } from './PrezlyFileInfo';
-export { default as UploadcareFileStoragePayload } from './UploadcareFileStoragePayload';
-export { default as UploadcareImageStoragePayload } from './UploadcareImageStoragePayload';
-export { default as UploadcareStoragePayload } from './UploadcareStoragePayload';
+export type { PrezlyFileInfo } from './PrezlyFileInfo';
+export type { UploadcareFileStoragePayload } from './UploadcareFileStoragePayload';
+export type { UploadcareImageStoragePayload } from './UploadcareImageStoragePayload';
+export type { UploadcareStoragePayload } from './UploadcareStoragePayload';

@@ -5,6 +5,7 @@
         "downlevelIteration": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
+        "importsNotUsedAsValues": "error",
         "lib": ["dom", "dom.iterable", "esnext"],
         "module": "commonjs",
         "moduleResolution": "node",

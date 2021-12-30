@@ -1,9 +1,7 @@
-import UploadcareFileStoragePayload from './UploadcareFileStoragePayload';
+import type { UploadcareFileStoragePayload } from './UploadcareFileStoragePayload';
 
-interface UploadcareImageStoragePayload extends UploadcareFileStoragePayload {
+export interface UploadcareImageStoragePayload extends UploadcareFileStoragePayload {
     effects: string[];
     original_height: number;
     original_width: number;
 }
-
-export default UploadcareImageStoragePayload;
