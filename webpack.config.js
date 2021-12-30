@@ -8,6 +8,7 @@ export default {
     output: {
         filename: 'prezly-uploadcare.js',
         path: path.resolve('build/umd'),
+        globalObject: 'this',
         library: {
             name: 'PrezlyUploadcare',
             type: 'umd',
