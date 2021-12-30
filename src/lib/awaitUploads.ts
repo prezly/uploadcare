@@ -58,4 +58,4 @@ export function awaitUploads(promises: FilePromise[]): ProgressPromise<Result> {
             );
         });
     });
-};
+}
