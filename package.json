@@ -3,6 +3,7 @@
     "version": "1.0.1",
     "description": "Uploadcare utilities used at Prezly",
     "license": "MIT",
+    "type": "module",
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "repository": {
