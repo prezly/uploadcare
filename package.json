@@ -15,6 +15,7 @@
             "default": "./build/cjs/index.cjs"
         }
     },
+    "files": ["build", "src"],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/prezly/uploadcare.git"
