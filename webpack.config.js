@@ -6,7 +6,8 @@ export default {
     mode: isDev ? 'development' : 'production',
     entry: './src/index.ts',
     output: {
-        path: path.resolve('./umd'),
+        filename: 'prezly-uploadcare.js',
+        path: path.resolve('build/umd'),
         library: {
             name: 'PrezlyUploadcare',
             type: 'umd',
@@ -20,8 +21,10 @@ export default {
         rules: [
             {
                 test: /\.ts$/,
-                use: 'ts-loader',
                 exclude: /node_modules/,
+                use: {
+                    loader: 'ts-loader',
+                },
             },
         ],
     },

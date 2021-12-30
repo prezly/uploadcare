@@ -4,8 +4,17 @@
     "description": "Uploadcare utilities used at Prezly",
     "license": "MIT",
     "type": "module",
-    "main": "build/index.js",
-    "types": "build/index.d.ts",
+    "main": "build/cjs/index.cjs",
+    "module": "build/esm/index.mjs",
+    "types": "build/types/index.d.ts",
+    "unpkg": "build/umd/prezly-uploadcare.js",
+    "exports": {
+        ".": {
+            "types": "./build/types/index.d.ts",
+            "import": "./build/esm/index.mjs",
+            "default": "./build/cjs/index.cjs"
+        }
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/prezly/uploadcare.git"
@@ -16,10 +25,10 @@
     "homepage": "https://github.com/prezly/uploadcare#readme",
     "scripts": {
         "build": "npm run build:types && npm run build:esm && npm run build:cjs && npm run build:umd",
-        "build:types": "tsc-fancy --preserveConsoleOutput --build .",
+        "build:types": "tsc-fancy --preserveConsoleOutput --build ./tsconfig.declarations.json",
         "build:esm": "gulp build:esm",
         "build:cjs": "gulp build:cjs",
-        "build:umd": "webpack --output-filename index.js",
+        "build:umd": "webpack",
         "watch": "concurrently --kill-others --names 'd.ts,esm ,cjs ' 'npm run watch:types' 'npm run watch:esm' 'npm run watch:cjs'",
         "watch:types": "npm run build:types -- --watch",
         "watch:esm": "gulp watch:esm",

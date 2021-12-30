@@ -3,7 +3,6 @@
         "allowSyntheticDefaultImports": true,
         "declaration": true,
         "downlevelIteration": true,
-        "emitDeclarationOnly": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "lib": ["dom", "dom.iterable", "esnext"],
@@ -18,6 +17,7 @@
         "target": "es5",
 
         "declarationDir": "./build/types",
+        "outDir": "./build/types",
         "rootDir": "./src",
         "typeRoots": ["./node_modules/@types", "./src/@types"]
     },
