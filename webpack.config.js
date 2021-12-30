@@ -21,10 +21,8 @@ export default {
         rules: [
             {
                 test: /\.ts$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'ts-loader',
-                },
+                use: 'ts-loader',
+                exclude: /node_modules/
             },
         ],
     },
