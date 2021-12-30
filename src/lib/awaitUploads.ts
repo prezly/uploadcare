@@ -1,10 +1,10 @@
 import ProgressPromise from '@prezly/progress-promise';
 import clamp from 'lodash.clamp';
-import { FilePromise } from 'uploadcare-widget';
+import type { FilePromise } from 'uploadcare-widget';
 
-import { PrezlyFileInfo } from '../types';
+import type { PrezlyFileInfo } from '../types';
 
-import toProgressPromise from './toProgressPromise';
+import { toProgressPromise } from './toProgressPromise';
 
 const MIN_PROGRESS = 0;
 const MAX_PROGRESS = 100;
@@ -14,7 +14,7 @@ interface Result {
     successfulUploads: PrezlyFileInfo[];
 }
 
-const awaitUploads = (promises: FilePromise[]): ProgressPromise<Result> => {
+export function awaitUploads(promises: FilePromise[]): ProgressPromise<Result> {
     const result: Result = { failedUploads: [], successfulUploads: [] };
 
     if (promises.length === 0) {
@@ -58,6 +58,4 @@ const awaitUploads = (promises: FilePromise[]): ProgressPromise<Result> => {
             );
         });
     });
-};
-
-export default awaitUploads;
+}

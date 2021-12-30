@@ -1,13 +1,13 @@
-import { FileInfo } from 'uploadcare-widget';
+import type { FileInfo } from 'uploadcare-widget';
 
 import { UPLOADCARE_CDN_URL, UPLOADCARE_FILE_DATA_KEY } from '../constants';
-import { UploadcareImageStoragePayload } from '../types';
+import type { UploadcareImageStoragePayload } from '../types';
 
-import UploadcareFile from './UploadcareFile';
+import { UploadcareFile } from './UploadcareFile';
 
 const MAX_PREVIEW_SIZE = 2000;
 
-class UploadcareImage {
+export class UploadcareImage {
     static createFromUploadcareWidgetPayload = (fileInfo: FileInfo): UploadcareImage => {
         if (!fileInfo.originalImageInfo) {
             throw new Error('UploadcareImage was given a non-image FileInfo object');
@@ -222,5 +222,3 @@ class UploadcareImage {
         });
     };
 }
-
-export default UploadcareImage;

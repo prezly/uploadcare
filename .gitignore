@@ -1,3 +1,4 @@
+.idea/
 .next/
 build/
 umd/
@@ -9,3 +10,4 @@ node_modules/
 *.log
 *.zip
 *.txt
+package-lock.json

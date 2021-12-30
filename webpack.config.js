@@ -1,12 +1,13 @@
-const path = require('path');
+import path from 'path';
 
 const isDev = process.env.NODE_ENV === 'development';
 
-module.exports = {
+export default {
     mode: isDev ? 'development' : 'production',
     entry: './src/index.ts',
     output: {
-        path: path.join(__dirname, 'umd'),
+        filename: 'prezly-uploadcare.js',
+        path: path.resolve('build/umd'),
         library: {
             name: 'PrezlyUploadcare',
             type: 'umd',

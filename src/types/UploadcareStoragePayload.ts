@@ -1,6 +1,4 @@
-import UploadcareFileStoragePayload from './UploadcareFileStoragePayload';
-import UploadcareImageStoragePayload from './UploadcareImageStoragePayload';
+import type { UploadcareFileStoragePayload } from './UploadcareFileStoragePayload';
+import type { UploadcareImageStoragePayload } from './UploadcareImageStoragePayload';
 
-type UploadcareStoragePayload = UploadcareFileStoragePayload | UploadcareImageStoragePayload;
-
-export default UploadcareStoragePayload;
+export type UploadcareStoragePayload = UploadcareFileStoragePayload | UploadcareImageStoragePayload;

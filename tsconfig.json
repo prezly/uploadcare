@@ -5,6 +5,7 @@
         "downlevelIteration": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
+        "importsNotUsedAsValues": "error",
         "lib": ["dom", "dom.iterable", "esnext"],
         "module": "commonjs",
         "moduleResolution": "node",
@@ -16,7 +17,8 @@
         "strict": true,
         "target": "es5",
 
-        "outDir": "./build",
+        "declarationDir": "./build/types",
+        "outDir": "./build/types",
         "rootDir": "./src",
         "typeRoots": ["./node_modules/@types", "./src/@types"]
     },

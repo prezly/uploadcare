@@ -1,7 +1,7 @@
-import { FileInfo } from 'uploadcare-widget';
+import type { FileInfo } from 'uploadcare-widget';
 
 import { UPLOADCARE_CDN_URL } from '../constants';
-import { UploadcareFileStoragePayload } from '../types';
+import type { UploadcareFileStoragePayload } from '../types';
 
 interface UploadcareFileParameters {
     filename: UploadcareFileStoragePayload['filename'];
@@ -37,7 +37,7 @@ const fromWidgetPayload = ({ uuid, name: filename, size, mimeType }: FileInfo) =
     uuid,
 });
 
-class UploadcareFile {
+export class UploadcareFile {
     static createFromPrezlyStoragePayload = (
         payload: UploadcareFileStoragePayload,
     ): UploadcareFile => new UploadcareFile(fromStoragePayload(payload));
@@ -91,5 +91,3 @@ class UploadcareFile {
             uuid: this.uuid,
         });
 }
-
-export default UploadcareFile;

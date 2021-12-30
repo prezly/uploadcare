@@ -1,5 +1,5 @@
-export { default as awaitUploads } from './awaitUploads';
-export { default as isUploadcareImageSizeValid } from './isUploadcareImageSizeValid';
-export { default as toProgressPromise } from './toProgressPromise';
-export { default as UploadcareFile } from './UploadcareFile';
-export { default as UploadcareImage } from './UploadcareImage';
+export { awaitUploads } from './awaitUploads';
+export { isUploadcareImageSizeValid } from './isUploadcareImageSizeValid';
+export { toProgressPromise } from './toProgressPromise';
+export type { UploadcareFile } from './UploadcareFile';
+export type { UploadcareImage } from './UploadcareImage';
