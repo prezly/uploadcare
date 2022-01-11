@@ -1,4 +1,4 @@
-import ProgressPromise from '@prezly/progress-promise';
+import { ProgressPromise } from '@prezly/progress-promise';
 import type { FileInfo, FilePromise, UploadInfo } from '@prezly/uploadcare-widget';
 
 export function toProgressPromise(filePromise: FilePromise): ProgressPromise<FileInfo, UploadInfo> {
