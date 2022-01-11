@@ -29,7 +29,7 @@
     "homepage": "https://github.com/prezly/uploadcare#readme",
     "scripts": {
         "build": "npm run build:types && npm run build:esm && npm run build:cjs && npm run build:umd",
-        "build:types": "tsc-fancy --preserveConsoleOutput --build ./tsconfig.declarations.json",
+        "build:types": "tsc --preserveConsoleOutput --build ./tsconfig.declarations.json",
         "build:esm": "gulp build:esm",
         "build:cjs": "gulp build:cjs",
         "build:umd": "webpack",
