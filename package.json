@@ -29,7 +29,7 @@
     "homepage": "https://github.com/prezly/uploadcare#readme",
     "scripts": {
         "build": "npm run build:types && npm run build:esm && npm run build:cjs && npm run build:umd",
-        "build:types": "tsc --preserveConsoleOutput --build ./tsconfig.declarations.json",
+        "build:types": "tsc --build ./tsconfig.declarations.json",
         "build:esm": "gulp build:esm",
         "build:cjs": "gulp build:cjs",
         "build:umd": "webpack",
@@ -70,7 +70,6 @@
         "prettier": "^2.2.1",
         "rimraf": "^3.0.2",
         "ts-loader": "^8.1.0",
-        "tsc-fancy": "^1.1.2",
         "typescript": "^4.1.5",
         "webpack": "^5.32.0",
         "webpack-cli": "^4.6.0"
