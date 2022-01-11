@@ -19,8 +19,7 @@
 
         "declarationDir": "./build/types",
         "outDir": "./build/types",
-        "rootDir": "./src",
-        "typeRoots": ["./node_modules/@types", "./src/@types"]
+        "rootDir": "./src"
     },
     "include": ["./src"]
 }

@@ -1,4 +1,4 @@
-import type { FileInfo } from 'uploadcare-widget';
+import type { FileInfo } from '@prezly/uploadcare-widget';
 
 import { UPLOADCARE_CDN_URL } from '../constants';
 import type { UploadcareFileStoragePayload } from '../types';

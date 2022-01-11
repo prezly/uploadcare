@@ -1,5 +1,3 @@
-import './@types/uploadcare-widget';
-
 export {
     UPLOADCARE_CDN_URL,
     UPLOADCARE_FILE_DATA_KEY,

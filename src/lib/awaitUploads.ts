@@ -1,6 +1,6 @@
 import ProgressPromise from '@prezly/progress-promise';
 import clamp from 'lodash.clamp';
-import type { FilePromise } from 'uploadcare-widget';
+import type { FilePromise } from '@prezly/uploadcare-widget';
 
 import type { PrezlyFileInfo } from '../types';
 
