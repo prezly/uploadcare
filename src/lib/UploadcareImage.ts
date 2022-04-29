@@ -4,7 +4,6 @@ import type { FileInfo } from '@prezly/uploadcare-widget';
 
 import { UPLOADCARE_CDN_URL, UPLOADCARE_FILE_DATA_KEY } from '../constants';
 
-
 const MAX_PREVIEW_SIZE = 2000;
 
 export class UploadcareImage {
