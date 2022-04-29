@@ -28,6 +28,9 @@ describe('UploadcareImage', function () {
         expect(IMAGE.scaleCrop(140, 150).dimensions).toEqual({ width: 140, height: 150 });
 
         // Combined
-        expect(IMAGE.preview().resize(200).format().dimensions).toEqual({ width: 200, height: 283 });
+        expect(IMAGE.preview().resize(200).format().dimensions).toEqual({
+            width: 200,
+            height: 283,
+        });
     });
 });

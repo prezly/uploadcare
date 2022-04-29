@@ -84,7 +84,7 @@ export class UploadcareImage {
         this.effects = effects;
     }
 
-    get dimensions(): { width: number, height: number } {
+    get dimensions(): { width: number; height: number } {
         const [width, height] = dimensions([this.originalWidth, this.originalHeight], this.effects);
         return { width, height };
     }
