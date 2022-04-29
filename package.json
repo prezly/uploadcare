@@ -53,7 +53,7 @@
     "dependencies": {
         "@prezly/progress-promise": "^1.0.0",
         "@prezly/uploadcare-widget": "^3.16.1",
-        "babel-plugin-add-import-extension": "^1.6.0",
+        "@prezly/uploads": "^0.3.1",
         "lodash.clamp": "^4.0.3"
     },
     "devDependencies": {
@@ -62,6 +62,7 @@
         "@babel/preset-typescript": "^7.16.5",
         "@types/gulp": "^4.0.9",
         "@types/lodash.clamp": "^4.0.6",
+        "babel-plugin-add-import-extension": "^1.6.0",
         "gulp": "^4.0.2",
         "gulp-babel": "^8.0.0",
         "gulp-rename": "^2.0.0",
