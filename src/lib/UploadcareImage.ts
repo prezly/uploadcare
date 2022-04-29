@@ -5,6 +5,7 @@ import type { FileInfo } from '@prezly/uploadcare-widget';
 import { UPLOADCARE_CDN_URL, UPLOADCARE_FILE_DATA_KEY } from '../constants';
 
 const MAX_PREVIEW_SIZE = 2000;
+const DEFAULT_PREVIEW_SIZE = 2048;
 
 export class UploadcareImage {
     static createFromUploadcareWidgetPayload(fileInfo: FileInfo): UploadcareImage {
@@ -83,12 +84,21 @@ export class UploadcareImage {
         this.effects = effects;
     }
 
-    get aspectRatio(): number {
-        const { width, height } = this.croppedSize;
+    get dimensions(): { width: number, height: number } {
+        const [width, height] = dimensions([this.originalWidth, this.originalHeight], this.effects);
+        return { width, height };
+    }
 
-        if (typeof width === 'undefined' || typeof height === 'undefined') {
-            return 1;
-        }
+    get width(): number {
+        return this.dimensions.width;
+    }
+
+    get height(): number {
+        return this.dimensions.height;
+    }
+
+    get aspectRatio(): number {
+        const { width, height } = this.dimensions;
 
         return width / height;
     }
@@ -121,25 +131,12 @@ export class UploadcareImage {
         return `${downloadUrl}${encodeURIComponent(this.filename)}`;
     }
 
-    get croppedSize(): { height?: number; width?: number } {
-        const cropEffect = this.effects.find((effect) => effect.startsWith('/crop/')) || '';
-        const [, width, height] = cropEffect.match(/(\d+)x(\d+)/) || [];
-
-        if (typeof width === 'undefined' || typeof height === 'undefined') {
-            return {
-                height: this.originalHeight,
-                width: this.originalWidth,
-            };
-        }
-
-        return {
-            width: parseInt(width, 10),
-            height: parseInt(height, 10),
-        };
-    }
-
     private isGif = () => {
         return this.mimeType === 'image/gif';
+    };
+
+    format = (imageFormat: 'auto' | 'jpeg' | 'png' | 'web' = 'auto'): UploadcareImage => {
+        return this.withEffect(`/format/${imageFormat}/`);
     };
 
     preview = (width: number | null = null, height: number | null = null): UploadcareImage => {
@@ -214,4 +211,69 @@ export class UploadcareImage {
             effects: [...this.effects, effect],
         });
     };
+}
+
+function dimensions([width, height]: [number, number], effects: string[]): [number, number] {
+    return effects.reduce(
+        function ([w, h], effect) {
+            const [_, name, params] = effect.split('/');
+            switch (name) {
+                case 'preview': {
+                    if (!params) {
+                        return fit([w, h], [DEFAULT_PREVIEW_SIZE, DEFAULT_PREVIEW_SIZE]);
+                    }
+                    const p = params.split('x');
+                    const px = parseInt(p[0], 10) || null;
+                    const py = parseInt(p[1], 10) || null;
+                    return fit([w, h], [px, py]);
+                }
+                case 'resize':
+                case 'crop':
+                case 'scale_crop': {
+                    const p = params.split('x');
+                    const px = parseInt(p[0], 10) || null;
+                    const py = parseInt(p[1], 10) || null;
+                    return resize([w, h], [px, py]);
+                }
+            }
+            return [w, h];
+        },
+        [width, height],
+    );
+}
+
+function fit(
+    [width, height]: [number, number],
+    [maxWidth, maxHeight]: [number | null, number | null],
+): [number, number] {
+    let resizedWidth = width;
+    let resizedHeight = height;
+
+    if (maxWidth && maxWidth < resizedWidth) {
+        resizedWidth = maxWidth;
+        resizedHeight = Math.round((height * maxWidth) / width);
+    }
+
+    if (maxHeight && maxHeight < resizedHeight) {
+        resizedWidth = Math.round((width * maxHeight) / height);
+        resizedHeight = maxHeight;
+    }
+
+    return [resizedWidth, resizedHeight];
+}
+
+function resize(
+    [width, height]: [number, number],
+    [maxWidth, maxHeight]: [number | null, number | null],
+): [number, number] {
+    if (maxWidth && maxHeight) {
+        return [maxWidth, maxHeight];
+    }
+    if (maxWidth) {
+        return [maxWidth, Math.round((height * maxWidth) / width)];
+    }
+    if (maxHeight) {
+        return [Math.round((width * maxHeight) / height), maxHeight];
+    }
+    return [width, height];
 }
