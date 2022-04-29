@@ -15,6 +15,7 @@ describe('UploadcareImage', function () {
         // Preview
         expect(IMAGE.preview().dimensions).toEqual({ width: 1447, height: 2048 });
         expect(IMAGE.preview(100, 100).dimensions).toEqual({ width: 71, height: 100 });
+        expect(IMAGE.preview(100, 200).dimensions).toEqual({ width: 100, height: 141 });
 
         // resize
         expect(IMAGE.resize(100, 110).dimensions).toEqual({ width: 100, height: 110 });
