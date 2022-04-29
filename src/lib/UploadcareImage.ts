@@ -43,48 +43,48 @@ export class UploadcareImage {
         caption: string;
     };
 
-    effects: string[];
+    uuid: string;
 
     filename: string;
 
     mimeType: string;
 
+    size: number;
+
+    effects: string[];
+
     originalHeight: number;
 
     originalWidth: number;
 
-    size: number;
-
-    uuid: string;
-
     constructor({
-        effects = [],
+        uuid,
         filename,
         mimeType,
-        originalHeight,
-        originalWidth,
         size,
-        uuid,
+        originalWidth,
+        originalHeight,
+        effects = [],
     }: {
-        effects: string[];
+        uuid: string;
         filename: string;
         mimeType: string;
-        originalHeight: number;
-        originalWidth: number;
         size: number;
-        uuid: string;
+        originalWidth: number;
+        originalHeight: number;
+        effects: string[];
     }) {
-        this.effects = effects;
+        this.uuid = uuid;
         this.filename = filename;
         this.mimeType = mimeType;
-        this.originalHeight = originalHeight;
-        this.originalWidth = originalWidth;
         this.size = size;
-        this.uuid = uuid;
+        this.originalWidth = originalWidth;
+        this.originalHeight = originalHeight;
+        this.effects = effects;
     }
 
     get aspectRatio(): number {
-        const { height, width } = this.croppedSize;
+        const { width, height } = this.croppedSize;
 
         if (typeof width === 'undefined' || typeof height === 'undefined') {
             return 1;
@@ -193,25 +193,25 @@ export class UploadcareImage {
     };
 
     toPrezlyStoragePayload = (): UploadedImage => ({
-        effects: this.effects,
+        version: 2,
+        uuid: this.uuid,
         filename: this.filename,
         mime_type: this.mimeType,
-        original_height: this.originalHeight,
-        original_width: this.originalWidth,
         size: this.size,
-        uuid: this.uuid,
-        version: 2,
+        original_width: this.originalWidth,
+        original_height: this.originalHeight,
+        effects: this.effects,
     });
 
     private withEffect = (effect: string): UploadcareImage => {
         return new UploadcareImage({
-            effects: [...this.effects, effect],
+            uuid: this.uuid,
             filename: this.filename,
             mimeType: this.mimeType,
-            originalHeight: this.originalHeight,
-            originalWidth: this.originalWidth,
             size: this.size,
-            uuid: this.uuid,
+            originalWidth: this.originalWidth,
+            originalHeight: this.originalHeight,
+            effects: [...this.effects, effect],
         });
     };
 }
