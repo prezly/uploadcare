@@ -8,6 +8,8 @@ export {
 } from './constants';
 
 export {
+    DEFAULT_PREVIEW_SIZE,
+    MAX_PREVIEW_SIZE,
     UploadcareImage,
     UploadcareFile,
     awaitUploads,

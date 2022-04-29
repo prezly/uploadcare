@@ -4,7 +4,8 @@ import type { FileInfo } from '@prezly/uploadcare-widget';
 
 import { UPLOADCARE_CDN_URL, UPLOADCARE_FILE_DATA_KEY } from '../constants';
 
-const MAX_PREVIEW_SIZE = 2000;
+export const MAX_PREVIEW_SIZE = 3000;
+export const DEFAULT_PREVIEW_SIZE = 2048;
 
 export class UploadcareImage {
     static createFromUploadcareWidgetPayload(fileInfo: FileInfo): UploadcareImage {
@@ -43,52 +44,61 @@ export class UploadcareImage {
         caption: string;
     };
 
-    effects: string[];
+    uuid: string;
 
     filename: string;
 
     mimeType: string;
 
+    size: number;
+
+    effects: string[];
+
     originalHeight: number;
 
     originalWidth: number;
 
-    size: number;
-
-    uuid: string;
-
     constructor({
-        effects = [],
+        uuid,
         filename,
         mimeType,
-        originalHeight,
-        originalWidth,
         size,
-        uuid,
+        originalWidth,
+        originalHeight,
+        effects = [],
     }: {
-        effects: string[];
+        uuid: string;
         filename: string;
         mimeType: string;
-        originalHeight: number;
-        originalWidth: number;
         size: number;
-        uuid: string;
+        originalWidth: number;
+        originalHeight: number;
+        effects: string[];
     }) {
-        this.effects = effects;
+        this.uuid = uuid;
         this.filename = filename;
         this.mimeType = mimeType;
-        this.originalHeight = originalHeight;
-        this.originalWidth = originalWidth;
         this.size = size;
-        this.uuid = uuid;
+        this.originalWidth = originalWidth;
+        this.originalHeight = originalHeight;
+        this.effects = effects;
+    }
+
+    get dimensions(): { width: number; height: number } {
+        const [width, height] = dimensions([this.originalWidth, this.originalHeight], this.effects);
+        return { width, height };
+    }
+
+    get width(): number {
+        return this.dimensions.width;
+    }
+
+    get height(): number {
+        return this.dimensions.height;
     }
 
     get aspectRatio(): number {
-        const { height, width } = this.croppedSize;
-
-        if (typeof width === 'undefined' || typeof height === 'undefined') {
-            return 1;
-        }
+        const { width, height } = this.dimensions;
 
         return width / height;
     }
@@ -121,25 +131,12 @@ export class UploadcareImage {
         return `${downloadUrl}${encodeURIComponent(this.filename)}`;
     }
 
-    get croppedSize(): { height?: number; width?: number } {
-        const cropEffect = this.effects.find((effect) => effect.startsWith('/crop/')) || '';
-        const [, width, height] = cropEffect.match(/(\d+)x(\d+)/) || [];
-
-        if (typeof width === 'undefined' || typeof height === 'undefined') {
-            return {
-                height: this.originalHeight,
-                width: this.originalWidth,
-            };
-        }
-
-        return {
-            width: parseInt(width, 10),
-            height: parseInt(height, 10),
-        };
-    }
-
     private isGif = () => {
         return this.mimeType === 'image/gif';
+    };
+
+    format = (imageFormat: 'auto' | 'jpeg' | 'png' | 'web' = 'auto'): UploadcareImage => {
+        return this.withEffect(`/format/${imageFormat}/`);
     };
 
     preview = (width: number | null = null, height: number | null = null): UploadcareImage => {
@@ -177,15 +174,11 @@ export class UploadcareImage {
         return this.withEffect(`/resize/${width}x${height}/`);
     };
 
-    scaleCrop = ({
-        center = false,
-        height,
-        width,
-    }: {
-        center?: boolean;
-        height: number;
-        width: number;
-    }): UploadcareImage => {
+    crop = (width: number, height: number): UploadcareImage => {
+        return this.withEffect(`/crop/${width}x${height}/`);
+    };
+
+    scaleCrop = (width: number, height: number, center: boolean = false): UploadcareImage => {
         if (center) {
             return this.withEffect(`/scale_crop/${width}x${height}/center/`);
         }
@@ -193,25 +186,90 @@ export class UploadcareImage {
     };
 
     toPrezlyStoragePayload = (): UploadedImage => ({
-        effects: this.effects,
+        version: 2,
+        uuid: this.uuid,
         filename: this.filename,
         mime_type: this.mimeType,
-        original_height: this.originalHeight,
-        original_width: this.originalWidth,
         size: this.size,
-        uuid: this.uuid,
-        version: 2,
+        original_width: this.originalWidth,
+        original_height: this.originalHeight,
+        effects: this.effects,
     });
 
     private withEffect = (effect: string): UploadcareImage => {
         return new UploadcareImage({
-            effects: [...this.effects, effect],
+            uuid: this.uuid,
             filename: this.filename,
             mimeType: this.mimeType,
-            originalHeight: this.originalHeight,
-            originalWidth: this.originalWidth,
             size: this.size,
-            uuid: this.uuid,
+            originalWidth: this.originalWidth,
+            originalHeight: this.originalHeight,
+            effects: [...this.effects, effect],
         });
     };
+}
+
+function dimensions([width, height]: [number, number], effects: string[]): [number, number] {
+    return effects.reduce(
+        function ([w, h], effect) {
+            const [_, name, params] = effect.split('/');
+            switch (name) {
+                case 'preview': {
+                    if (!params) {
+                        return fit([w, h], [DEFAULT_PREVIEW_SIZE, DEFAULT_PREVIEW_SIZE]);
+                    }
+                    const p = params.split('x');
+                    const px = parseInt(p[0], 10) || null;
+                    const py = parseInt(p[1], 10) || null;
+                    return fit([w, h], [px, py]);
+                }
+                case 'resize':
+                case 'crop':
+                case 'scale_crop': {
+                    const p = params.split('x');
+                    const px = parseInt(p[0], 10) || null;
+                    const py = parseInt(p[1], 10) || null;
+                    return resize([w, h], [px, py]);
+                }
+            }
+            return [w, h];
+        },
+        [width, height],
+    );
+}
+
+function fit(
+    [width, height]: [number, number],
+    [maxWidth, maxHeight]: [number | null, number | null],
+): [number, number] {
+    let resizedWidth = width;
+    let resizedHeight = height;
+
+    if (maxWidth && maxWidth < resizedWidth) {
+        resizedWidth = maxWidth;
+        resizedHeight = Math.round((height * maxWidth) / width);
+    }
+
+    if (maxHeight && maxHeight < resizedHeight) {
+        resizedWidth = Math.round((width * maxHeight) / height);
+        resizedHeight = maxHeight;
+    }
+
+    return [resizedWidth, resizedHeight];
+}
+
+function resize(
+    [width, height]: [number, number],
+    [maxWidth, maxHeight]: [number | null, number | null],
+): [number, number] {
+    if (maxWidth && maxHeight) {
+        return [maxWidth, maxHeight];
+    }
+    if (maxWidth) {
+        return [maxWidth, Math.round((height * maxWidth) / width)];
+    }
+    if (maxHeight) {
+        return [Math.round((width * maxHeight) / height), maxHeight];
+    }
+    return [width, height];
 }
