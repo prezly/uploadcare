@@ -53,6 +53,7 @@
     "dependencies": {
         "@prezly/progress-promise": "^1.0.0",
         "@prezly/uploadcare-widget": "^3.16.1",
+        "@prezly/uploads": "^0.3.1",
         "babel-plugin-add-import-extension": "^1.6.0",
         "lodash.clamp": "^4.0.3"
     },

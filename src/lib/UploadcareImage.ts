@@ -1,14 +1,14 @@
+import type { UploadedImage } from '@prezly/uploads';
+import { isUploadedImage } from '@prezly/uploads';
 import type { FileInfo } from '@prezly/uploadcare-widget';
 
 import { UPLOADCARE_CDN_URL, UPLOADCARE_FILE_DATA_KEY } from '../constants';
-import type { UploadcareImageStoragePayload } from '../types';
 
-import { UploadcareFile } from './UploadcareFile';
 
 const MAX_PREVIEW_SIZE = 2000;
 
 export class UploadcareImage {
-    static createFromUploadcareWidgetPayload = (fileInfo: FileInfo): UploadcareImage => {
+    static createFromUploadcareWidgetPayload(fileInfo: FileInfo): UploadcareImage {
         if (!fileInfo.originalImageInfo) {
             throw new Error('UploadcareImage was given a non-image FileInfo object');
         }
@@ -22,11 +22,9 @@ export class UploadcareImage {
             size: fileInfo.size,
             uuid: fileInfo.uuid,
         });
-    };
+    }
 
-    static createFromPrezlyStoragePayload = (
-        payload: UploadcareImageStoragePayload,
-    ): UploadcareImage => {
+    static createFromPrezlyStoragePayload(payload: UploadedImage): UploadcareImage {
         return new UploadcareImage({
             effects: payload.effects || [],
             filename: payload.filename,
@@ -36,18 +34,11 @@ export class UploadcareImage {
             size: payload.size,
             uuid: payload.uuid,
         });
-    };
+    }
 
-    static isPrezlyStoragePayload = (payload: any): payload is UploadcareImageStoragePayload => {
-        return (
-            payload !== null &&
-            typeof payload === 'object' &&
-            typeof payload.original_width === 'number' &&
-            typeof payload.original_height === 'number' &&
-            Array.isArray(payload.effects) &&
-            UploadcareFile.isPrezlyStoragePayload(payload)
-        );
-    };
+    static isPrezlyStoragePayload(payload: any): payload is UploadedImage {
+        return isUploadedImage(payload);
+    }
 
     [UPLOADCARE_FILE_DATA_KEY]?: {
         caption: string;
@@ -196,10 +187,13 @@ export class UploadcareImage {
         height: number;
         width: number;
     }): UploadcareImage => {
-        return this.withEffect(`/scale_crop/${width}x${height}/${center ? 'center/' : ''}`);
+        if (center) {
+            return this.withEffect(`/scale_crop/${width}x${height}/center/`);
+        }
+        return this.withEffect(`/scale_crop/${width}x${height}/`);
     };
 
-    toPrezlyStoragePayload = (): UploadcareImageStoragePayload => ({
+    toPrezlyStoragePayload = (): UploadedImage => ({
         effects: this.effects,
         filename: this.filename,
         mime_type: this.mimeType,
@@ -210,7 +204,7 @@ export class UploadcareImage {
         version: 2,
     });
 
-    withEffect = (effect: string): UploadcareImage => {
+    private withEffect = (effect: string): UploadcareImage => {
         return new UploadcareImage({
             effects: [...this.effects, effect],
             filename: this.filename,

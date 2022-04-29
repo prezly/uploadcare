@@ -1,60 +1,38 @@
 import type { FileInfo } from '@prezly/uploadcare-widget';
+import type { UploadedFile } from '@prezly/uploads';
+import { isUploadedFile } from '@prezly/uploads';
 
 import { UPLOADCARE_CDN_URL } from '../constants';
-import type { UploadcareFileStoragePayload } from '../types';
 
 interface UploadcareFileParameters {
-    filename: UploadcareFileStoragePayload['filename'];
-    mimeType: UploadcareFileStoragePayload['mime_type'];
-    size: UploadcareFileStoragePayload['size'];
-    uuid: UploadcareFileStoragePayload['uuid'];
+    uuid: UploadedFile['uuid'];
+    filename: UploadedFile['filename'];
+    mimeType: UploadedFile['mime_type'];
+    size: UploadedFile['size'];
 }
 
-const fromStoragePayload = ({
-    filename,
-    mime_type: mimeType,
-    size,
-    uuid,
-}: UploadcareFileStoragePayload) => ({
-    filename,
-    mimeType,
-    size,
-    uuid,
-});
-
-const toStoragePayload = ({ uuid, filename, size, mimeType }: UploadcareFileParameters) => ({
-    filename,
-    mime_type: mimeType,
-    size,
-    uuid,
-    version: 2,
-});
-
-const fromWidgetPayload = ({ uuid, name: filename, size, mimeType }: FileInfo) => ({
-    filename,
-    mimeType,
-    size,
-    uuid,
-});
-
 export class UploadcareFile {
-    static createFromPrezlyStoragePayload = (
-        payload: UploadcareFileStoragePayload,
-    ): UploadcareFile => new UploadcareFile(fromStoragePayload(payload));
+    static createFromPrezlyStoragePayload(payload: UploadedFile): UploadcareFile {
+        return new UploadcareFile({
+            uuid: payload.uuid,
+            filename: payload.filename,
+            mimeType: payload.mime_type,
+            size: payload.size,
+        });
+    }
 
-    static createFromUploadcareWidgetPayload = (payload: FileInfo): UploadcareFile =>
-        new UploadcareFile(fromWidgetPayload(payload));
+    static createFromUploadcareWidgetPayload(payload: FileInfo): UploadcareFile {
+        return new UploadcareFile({
+            uuid: payload.uuid,
+            filename: payload.name,
+            mimeType: payload.mimeType,
+            size: payload.size,
+        });
+    }
 
-    static isPrezlyStoragePayload = (payload: any): payload is UploadcareFileStoragePayload => {
-        return (
-            payload !== null &&
-            typeof payload === 'object' &&
-            typeof payload.filename === 'string' &&
-            typeof payload.mime_type === 'string' &&
-            typeof payload.size === 'number' &&
-            typeof payload.uuid === 'string'
-        );
-    };
+    static isPrezlyStoragePayload(payload: any): payload is UploadedFile {
+        return isUploadedFile(payload);
+    }
 
     public cdnUrl: string;
 
@@ -83,11 +61,11 @@ export class UploadcareFile {
         return this.mimeType.startsWith('image/');
     }
 
-    toPrezlyStoragePayload = (): UploadcareFileStoragePayload =>
-        toStoragePayload({
-            filename: this.filename,
-            mimeType: this.mimeType,
-            size: this.size,
-            uuid: this.uuid,
-        });
+    toPrezlyStoragePayload = (): UploadedFile => ({
+        version: 2,
+        uuid: this.uuid,
+        filename: this.filename,
+        mime_type: this.mimeType,
+        size: this.size,
+    });
 }
