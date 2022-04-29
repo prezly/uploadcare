@@ -37,7 +37,7 @@
         "watch:types": "npm run build:types -- --watch",
         "watch:esm": "gulp watch:esm",
         "watch:cjs": "gulp watch:cjs",
-        "test": "npm run test:build",
+        "test": "npm run test:build && npm run test:unit",
         "test:unit": "jest --no-cache",
         "test:build": "npm run test:cjs && npm run test:esm && npm run test:umd",
         "test:esm": "node build/esm/index.mjs",
