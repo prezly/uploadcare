@@ -4,7 +4,7 @@ import type { FileInfo } from '@prezly/uploadcare-widget';
 
 import { UPLOADCARE_CDN_URL, UPLOADCARE_FILE_DATA_KEY } from '../constants';
 
-const MAX_PREVIEW_SIZE = 2000;
+const MAX_PREVIEW_SIZE = 3000;
 const DEFAULT_PREVIEW_SIZE = 2048;
 
 export class UploadcareImage {
@@ -174,15 +174,11 @@ export class UploadcareImage {
         return this.withEffect(`/resize/${width}x${height}/`);
     };
 
-    scaleCrop = ({
-        center = false,
-        height,
-        width,
-    }: {
-        center?: boolean;
-        height: number;
-        width: number;
-    }): UploadcareImage => {
+    crop = (width: number, height: number): UploadcareImage => {
+        return this.withEffect(`/crop/${width}x${height}/`);
+    };
+
+    scaleCrop = (width: number, height: number, center: boolean = false): UploadcareImage => {
         if (center) {
             return this.withEffect(`/scale_crop/${width}x${height}/center/`);
         }
