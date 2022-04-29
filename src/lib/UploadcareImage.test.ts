@@ -1,4 +1,4 @@
-import {UploadcareImage} from "./UploadcareImage";
+import { UploadcareImage } from './UploadcareImage';
 
 const IMAGE = new UploadcareImage({
     uuid: '00000000-0000-0000-0000-000000000000',
@@ -21,10 +21,13 @@ describe('UploadcareImage', function () {
         expect(IMAGE.resize(100).dimensions).toEqual({ width: 100, height: 141 });
         expect(IMAGE.resize(null, 100).dimensions).toEqual({ width: 71, height: 100 });
 
+        // Crop
+        expect(IMAGE.crop(120, 130).dimensions).toEqual({ width: 120, height: 130 });
+
         // Scale crop
-        expect(IMAGE.scaleCrop({ width: 140, height: 150 }).dimensions).toEqual({ width: 140, height: 150 });
+        expect(IMAGE.scaleCrop(140, 150).dimensions).toEqual({ width: 140, height: 150 });
 
         // Combined
-        expect(IMAGE.preview().resize(200).dimensions).toEqual({ width: 200, height: 283 });
+        expect(IMAGE.preview().resize(200).format().dimensions).toEqual({ width: 200, height: 283 });
     });
 });
