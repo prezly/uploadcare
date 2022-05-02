@@ -88,12 +88,7 @@ export class UploadcareGifVideo {
             UPLOADCARE_CDN_URL,
             this.uuid,
             'gif2video',
-            // Prepend a dash only if effects exist.
-            // It doesn't matter if there's a dash at the end of URL even if there are no effects,
-            // but it looks cleaner without it.
-            this.effects.length === 0
-                ? this.effects
-                : ['', ...this.effects, '/inline/no/'].join('-'),
+            ['', ...this.effects, '/inline/no/'].join('-'),
         ].join('/');
 
         return `${downloadUrl}${encodeURIComponent(this.filename)}`;
