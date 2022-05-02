@@ -133,4 +133,11 @@ describe('UploadcareImage', function () {
             fail('Error is not thrown');
         });
     });
+
+    describe('preview', function () {
+        it('should not apply the preview effect on GIF images', function () {
+            expect(GIF.effects).toEqual([]);
+            expect(GIF.preview().effects).toEqual([]);
+        });
+    });
 });
