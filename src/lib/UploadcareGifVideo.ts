@@ -1,21 +1,21 @@
 import { UPLOADCARE_CDN_URL } from '../constants';
 
 export class UploadcareGifVideo {
-    readonly uuid: string;
+    public readonly uuid: string;
 
-    readonly filename: string;
+    public readonly filename: string;
 
-    readonly mimeType: string;
+    public readonly mimeType: string;
 
-    readonly size: number;
+    public readonly size: number;
 
-    readonly width: number;
+    public readonly width: number;
 
-    readonly height: number;
+    public readonly height: number;
 
-    readonly effects: string[];
+    public readonly effects: string[];
 
-    constructor(props: {
+    public constructor(props: {
         uuid: string;
         filename: string;
         mimeType: string;
@@ -83,7 +83,7 @@ export class UploadcareGifVideo {
         return `${cdnUrl}${encodeURIComponent(this.filename)}`;
     }
 
-    get downloadUrl(): string {
+    public get downloadUrl(): string {
         const downloadUrl = [
             UPLOADCARE_CDN_URL,
             this.uuid,

@@ -12,7 +12,7 @@ interface UploadcareFileParameters {
 }
 
 export class UploadcareFile {
-    static createFromPrezlyStoragePayload(payload: UploadedFile): UploadcareFile {
+    public static createFromPrezlyStoragePayload(payload: UploadedFile): UploadcareFile {
         return new UploadcareFile({
             uuid: payload.uuid,
             filename: payload.filename,
@@ -21,7 +21,7 @@ export class UploadcareFile {
         });
     }
 
-    static createFromUploadcareWidgetPayload(payload: FileInfo): UploadcareFile {
+    public static createFromUploadcareWidgetPayload(payload: FileInfo): UploadcareFile {
         return new UploadcareFile({
             uuid: payload.uuid,
             filename: payload.name,
@@ -30,7 +30,7 @@ export class UploadcareFile {
         });
     }
 
-    static isPrezlyStoragePayload(payload: any): payload is UploadedFile {
+    public static isPrezlyStoragePayload(payload: any): payload is UploadedFile {
         return isUploadedFile(payload);
     }
 
@@ -46,7 +46,7 @@ export class UploadcareFile {
 
     public uuid: string;
 
-    constructor({ filename, mimeType, size, uuid }: UploadcareFileParameters) {
+    public constructor({ filename, mimeType, size, uuid }: UploadcareFileParameters) {
         this.uuid = uuid;
         this.filename = filename;
         this.size = size;
@@ -57,11 +57,11 @@ export class UploadcareFile {
         )}`;
     }
 
-    get isImage() {
+    public get isImage() {
         return this.mimeType.startsWith('image/');
     }
 
-    toPrezlyStoragePayload = (): UploadedFile => ({
+    public toPrezlyStoragePayload = (): UploadedFile => ({
         version: 2,
         uuid: this.uuid,
         filename: this.filename,

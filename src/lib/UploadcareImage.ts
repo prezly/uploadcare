@@ -10,7 +10,7 @@ export const MAX_PREVIEW_SIZE = 3000;
 export const DEFAULT_PREVIEW_SIZE = 2048;
 
 export class UploadcareImage {
-    static createFromUploadcareWidgetPayload(fileInfo: FileInfo): UploadcareImage {
+    public static createFromUploadcareWidgetPayload(fileInfo: FileInfo): UploadcareImage {
         if (!fileInfo.originalImageInfo) {
             throw new Error('UploadcareImage was given a non-image FileInfo object');
         }
@@ -26,7 +26,7 @@ export class UploadcareImage {
         });
     }
 
-    static createFromPrezlyStoragePayload(payload: UploadedImage): UploadcareImage {
+    public static createFromPrezlyStoragePayload(payload: UploadedImage): UploadcareImage {
         return new UploadcareImage({
             effects: payload.effects || [],
             filename: payload.filename,
@@ -38,7 +38,7 @@ export class UploadcareImage {
         });
     }
 
-    static isPrezlyStoragePayload(payload: any): payload is UploadedImage {
+    public static isPrezlyStoragePayload(payload: any): payload is UploadedImage {
         return isUploadedImage(payload);
     }
 
@@ -46,19 +46,19 @@ export class UploadcareImage {
         caption: string;
     };
 
-    readonly uuid: string;
+    public readonly uuid: string;
 
-    readonly filename: string;
+    public readonly filename: string;
 
-    readonly mimeType: string;
+    public readonly mimeType: string;
 
-    readonly size: number;
+    public readonly size: number;
 
-    readonly originalHeight: number;
+    public readonly originalHeight: number;
 
-    readonly originalWidth: number;
+    public readonly originalWidth: number;
 
-    readonly effects: string[];
+    public readonly effects: string[];
 
     constructor({
         uuid,
@@ -86,26 +86,26 @@ export class UploadcareImage {
         this.effects = effects;
     }
 
-    get dimensions(): { width: number; height: number } {
+    public get dimensions(): { width: number; height: number } {
         const [width, height] = dimensions([this.originalWidth, this.originalHeight], this.effects);
         return { width, height };
     }
 
-    get width(): number {
+    public get width(): number {
         return this.dimensions.width;
     }
 
-    get height(): number {
+    public get height(): number {
         return this.dimensions.height;
     }
 
-    get aspectRatio(): number {
+    public get aspectRatio(): number {
         const { width, height } = this.dimensions;
 
         return width / height;
     }
 
-    get cdnUrl(): string {
+    public get cdnUrl(): string {
         const cdnUrl = [
             UPLOADCARE_CDN_URL,
             this.uuid,
@@ -118,7 +118,7 @@ export class UploadcareImage {
         return `${cdnUrl}${encodeURIComponent(this.filename)}`;
     }
 
-    get downloadUrl(): string {
+    public get downloadUrl(): string {
         const downloadUrl = [
             UPLOADCARE_CDN_URL,
             this.uuid,
@@ -133,15 +133,18 @@ export class UploadcareImage {
         return `${downloadUrl}${encodeURIComponent(this.filename)}`;
     }
 
-    isGif = () => {
+    public isGif = () => {
         return this.mimeType === 'image/gif';
     };
 
-    format = (imageFormat: 'auto' | 'jpeg' | 'png' | 'web' = 'auto'): UploadcareImage => {
+    public format = (imageFormat: 'auto' | 'jpeg' | 'png' | 'web' = 'auto'): UploadcareImage => {
         return this.withEffect(`/format/${imageFormat}/`);
     };
 
-    preview = (width: number | null = null, height: number | null = null): UploadcareImage => {
+    public preview = (
+        width: number | null = null,
+        height: number | null = null,
+    ): UploadcareImage => {
         if (this.isGif()) {
             // Do not resize GIF otherwise it breaks the animation
             return this;
@@ -155,7 +158,10 @@ export class UploadcareImage {
         return this.withEffect(`/preview/${effectiveWidth}x${effectiveHeight}/`);
     };
 
-    resize = (width: number | null = null, height: number | null = null): UploadcareImage => {
+    public resize = (
+        width: number | null = null,
+        height: number | null = null,
+    ): UploadcareImage => {
         if (width == null && height === null) {
             throw new Error('At least one function argument has to be non-null');
         }
@@ -176,18 +182,22 @@ export class UploadcareImage {
         return this.withEffect(`/resize/${width}x${height}/`);
     };
 
-    crop = (width: number, height: number): UploadcareImage => {
+    public crop = (width: number, height: number): UploadcareImage => {
         return this.withEffect(`/crop/${width}x${height}/`);
     };
 
-    scaleCrop = (width: number, height: number, center: boolean = false): UploadcareImage => {
+    public scaleCrop = (
+        width: number,
+        height: number,
+        center: boolean = false,
+    ): UploadcareImage => {
         if (center) {
             return this.withEffect(`/scale_crop/${width}x${height}/center/`);
         }
         return this.withEffect(`/scale_crop/${width}x${height}/`);
     };
 
-    toGifVideo(): UploadcareGifVideo {
+    public toGifVideo(): UploadcareGifVideo {
         // The `gif2video` transformation is supported only for gifs,
         // otherwise the server responds with "400 Bad Request".
         if (!this.isGif()) {
@@ -203,7 +213,7 @@ export class UploadcareImage {
         });
     }
 
-    toPrezlyStoragePayload = (): UploadedImage => ({
+    public toPrezlyStoragePayload = (): UploadedImage => ({
         version: 2,
         uuid: this.uuid,
         filename: this.filename,
