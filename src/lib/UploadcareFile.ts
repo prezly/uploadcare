@@ -51,7 +51,7 @@ export class UploadcareFile {
         this.filename = filename;
         this.size = size;
         this.mimeType = mimeType;
-        this.cdnUrl = `${UPLOADCARE_CDN_URL}/${uuid}/`;
+        this.cdnUrl = `${UPLOADCARE_CDN_URL}/${uuid}/${encodeURIComponent(filename)}`;
         this.downloadUrl = `${UPLOADCARE_CDN_URL}/${uuid}/-/inline/no/${encodeURIComponent(
             filename,
         )}`;
