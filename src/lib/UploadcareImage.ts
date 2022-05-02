@@ -190,7 +190,7 @@ export class UploadcareImage {
     toGifVideo(): UploadcareGifVideo {
         // The `gif2video` transformation is supported only for gifs,
         // otherwise the server responds with "400 Bad Request".
-        if (this.isGif()) {
+        if (!this.isGif()) {
             throw new Error(`You can only convert a GIF to video. Given: "${this.mimeType}".`);
         }
         return new UploadcareGifVideo({

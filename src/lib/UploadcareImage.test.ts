@@ -1,4 +1,5 @@
 import { UploadcareImage } from './UploadcareImage';
+import { UploadcareGifVideo } from './UploadcareGifVideo';
 
 const IMAGE = new UploadcareImage({
     uuid: '00000000-0000-0000-0000-000000000000',
@@ -7,6 +8,15 @@ const IMAGE = new UploadcareImage({
     size: 65536,
     originalWidth: 3133,
     originalHeight: 4433,
+    effects: [],
+});
+const GIF = new UploadcareImage({
+    uuid: '00000000-0000-0000-0000-000000000000',
+    filename: 'image.gif',
+    mimeType: 'image/gif',
+    size: 65536,
+    originalWidth: 300,
+    originalHeight: 400,
     effects: [],
 });
 
@@ -103,6 +113,24 @@ describe('UploadcareImage', function () {
 
             // Combined
             expect(IMAGE.preview().resize(200).format().aspectRatio).toBeCloseTo(0.71);
+        });
+    });
+
+    describe('toGifImage', function () {
+        it('should convert GIF images to videos', function () {
+            expect(GIF.toGifVideo()).toBeInstanceOf(UploadcareGifVideo);
+        });
+        it('should ignore applied GIF image effects when converting to videos', function () {
+            expect(GIF.resize(100).toGifVideo().effects).toEqual([]);
+        });
+        it('should throw error when a non-GIF image is being converted to video', function () {
+            try {
+                IMAGE.toGifVideo()
+            } catch (error) {
+                expect(error).toBeInstanceOf(Error);
+                return;
+            }
+            fail('Error is not thrown');
         });
     });
 });
