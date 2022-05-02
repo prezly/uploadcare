@@ -125,7 +125,7 @@ describe('UploadcareImage', function () {
         });
         it('should throw error when a non-GIF image is being converted to video', function () {
             try {
-                IMAGE.toGifVideo()
+                IMAGE.toGifVideo();
             } catch (error) {
                 expect(error).toBeInstanceOf(Error);
                 return;
