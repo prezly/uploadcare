@@ -10,8 +10,9 @@ export {
 export {
     DEFAULT_PREVIEW_SIZE,
     MAX_PREVIEW_SIZE,
-    UploadcareImage,
     UploadcareFile,
+    UploadcareGifVideo,
+    UploadcareImage,
     awaitUploads,
     isUploadcareImageSizeValid,
     toProgressPromise,
