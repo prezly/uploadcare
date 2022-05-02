@@ -4,6 +4,8 @@ import type { FileInfo } from '@prezly/uploadcare-widget';
 
 import { UPLOADCARE_CDN_URL, UPLOADCARE_FILE_DATA_KEY } from '../constants';
 
+import { UploadcareGifVideo } from './UploadcareGifVideo';
+
 export const MAX_PREVIEW_SIZE = 3000;
 export const DEFAULT_PREVIEW_SIZE = 2048;
 
@@ -44,19 +46,19 @@ export class UploadcareImage {
         caption: string;
     };
 
-    uuid: string;
+    readonly uuid: string;
 
-    filename: string;
+    readonly filename: string;
 
-    mimeType: string;
+    readonly mimeType: string;
 
-    size: number;
+    readonly size: number;
 
-    effects: string[];
+    readonly originalHeight: number;
 
-    originalHeight: number;
+    readonly originalWidth: number;
 
-    originalWidth: number;
+    readonly effects: string[];
 
     constructor({
         uuid,
@@ -131,7 +133,7 @@ export class UploadcareImage {
         return `${downloadUrl}${encodeURIComponent(this.filename)}`;
     }
 
-    private isGif = () => {
+    isGif = () => {
         return this.mimeType === 'image/gif';
     };
 
@@ -184,6 +186,22 @@ export class UploadcareImage {
         }
         return this.withEffect(`/scale_crop/${width}x${height}/`);
     };
+
+    toGifVideo(): UploadcareGifVideo {
+        // The `gif2video` transformation is supported only for gifs,
+        // otherwise the server responds with "400 Bad Request".
+        if (this.isGif()) {
+            throw new Error(`You can only convert a GIF to video. Given: "${this.mimeType}".`);
+        }
+        return new UploadcareGifVideo({
+            uuid: this.uuid,
+            filename: this.filename,
+            mimeType: this.mimeType,
+            size: this.size,
+            width: this.originalWidth,
+            height: this.originalHeight,
+        });
+    }
 
     toPrezlyStoragePayload = (): UploadedImage => ({
         version: 2,
