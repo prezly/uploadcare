@@ -197,7 +197,7 @@ export class UploadcareImage {
         return this.withEffect(`/scale_crop/${width}x${height}/`);
     };
 
-    public toGifVideo(): UploadcareGifVideo {
+    public toGifVideo = (): UploadcareGifVideo => {
         // The `gif2video` transformation is supported only for gifs,
         // otherwise the server responds with "400 Bad Request".
         if (!this.isGif()) {
@@ -211,7 +211,20 @@ export class UploadcareImage {
             width: this.originalWidth,
             height: this.originalHeight,
         });
-    }
+    };
+
+    public srcSet = (resizeWidth: number): string => {
+        const width = this.width;
+
+        if (width < resizeWidth * 2) {
+            return '';
+        }
+
+        const src1x = this.resize(resizeWidth).cdnUrl;
+        const src2x = this.resize(resizeWidth * 2).cdnUrl;
+
+        return `${src1x} 1x, ${src2x} 2x`;
+    };
 
     public toPrezlyStoragePayload = (): UploadedImage => ({
         version: 2,
