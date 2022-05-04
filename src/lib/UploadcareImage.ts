@@ -213,15 +213,13 @@ export class UploadcareImage {
         });
     };
 
-    public srcSet = (resizeWidth: number): string => {
-        const width = this.width;
-
-        if (width < resizeWidth * 2) {
+    public srcSet = (width: number): string => {
+        if (this.width < width * 2) {
             return '';
         }
 
-        const src1x = this.resize(resizeWidth).cdnUrl;
-        const src2x = this.resize(resizeWidth * 2).cdnUrl;
+        const src1x = this.resize(width).cdnUrl;
+        const src2x = this.resize(width * 2).cdnUrl;
 
         return `${src1x} 1x, ${src2x} 2x`;
     };
