@@ -100,6 +100,10 @@ export class UploadcareImage {
         }
     }
 
+    get caption(): string | undefined {
+        return this[UPLOADCARE_FILE_DATA_KEY]?.caption;
+    }
+
     public get dimensions(): { width: number; height: number } {
         const [width, height] = dimensions([this.originalWidth, this.originalHeight], this.effects);
         return { width, height };
