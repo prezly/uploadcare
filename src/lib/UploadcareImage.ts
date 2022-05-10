@@ -10,7 +10,10 @@ export const MAX_PREVIEW_SIZE = 3000;
 export const DEFAULT_PREVIEW_SIZE = 2048;
 
 export class UploadcareImage {
-    public static createFromUploadcareWidgetPayload(fileInfo: FileInfo): UploadcareImage {
+    public static createFromUploadcareWidgetPayload(
+        fileInfo: FileInfo,
+        caption?: string,
+    ): UploadcareImage {
         if (!fileInfo.originalImageInfo) {
             throw new Error('UploadcareImage was given a non-image FileInfo object');
         }
@@ -23,10 +26,14 @@ export class UploadcareImage {
             originalWidth: fileInfo.originalImageInfo.width,
             size: fileInfo.size,
             uuid: fileInfo.uuid,
+            caption,
         });
     }
 
-    public static createFromPrezlyStoragePayload(payload: UploadedImage): UploadcareImage {
+    public static createFromPrezlyStoragePayload(
+        payload: UploadedImage,
+        caption?: string,
+    ): UploadcareImage {
         return new UploadcareImage({
             effects: payload.effects || [],
             filename: payload.filename,
@@ -35,6 +42,7 @@ export class UploadcareImage {
             originalWidth: payload.original_width,
             size: payload.size,
             uuid: payload.uuid,
+            caption,
         });
     }
 
@@ -68,6 +76,7 @@ export class UploadcareImage {
         originalWidth,
         originalHeight,
         effects = [],
+        caption,
     }: {
         uuid: string;
         filename: string;
@@ -76,6 +85,7 @@ export class UploadcareImage {
         originalWidth: number;
         originalHeight: number;
         effects: string[];
+        caption?: string;
     }) {
         this.uuid = uuid;
         this.filename = filename;
@@ -84,6 +94,10 @@ export class UploadcareImage {
         this.originalWidth = originalWidth;
         this.originalHeight = originalHeight;
         this.effects = effects;
+
+        if (caption !== undefined) {
+            this[UPLOADCARE_FILE_DATA_KEY] = { caption };
+        }
     }
 
     public get dimensions(): { width: number; height: number } {
