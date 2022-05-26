@@ -1,6 +1,6 @@
 {
     "name": "@prezly/uploadcare",
-    "version": "2.3.2",
+    "version": "2.3.3",
     "description": "Uploadcare utilities used at Prezly",
     "license": "MIT",
     "type": "module",
