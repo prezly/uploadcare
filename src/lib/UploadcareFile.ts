@@ -1,6 +1,7 @@
 import type { FileInfo } from '@prezly/uploadcare-widget';
 import type { UploadedFile } from '@prezly/uploads';
 import { isUploadedFile } from '@prezly/uploads';
+import sanitizeFileName from 'sanitize-filename';
 
 import { UPLOADCARE_CDN_URL } from '../constants';
 
@@ -52,7 +53,9 @@ export class UploadcareFile {
         this.size = size;
         this.mimeType = mimeType;
         this.cdnUrl = `${UPLOADCARE_CDN_URL}/${uuid}/${encodeURIComponent(this.filename)}`;
-        this.downloadUrl = `${UPLOADCARE_CDN_URL}/${uuid}/-/inline/no/${UploadcareFile.replaceForbiddenSymbols(this.filename)}`;
+        this.downloadUrl = `${UPLOADCARE_CDN_URL}/${uuid}/-/inline/no/${UploadcareFile.replaceForbiddenSymbols(
+            this.filename,
+        )}`;
     }
 
     public get isImage() {
@@ -68,6 +71,6 @@ export class UploadcareFile {
     });
 
     private static replaceForbiddenSymbols = (filename: string) => {
-        return filename.replace(/[/\\?%*:|"<>=]/g, '_');
+        return sanitizeFileName(filename, { replacement: '_' });
     };
 }
