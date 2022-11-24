@@ -51,10 +51,8 @@ export class UploadcareFile {
         this.filename = filename;
         this.size = size;
         this.mimeType = mimeType;
-        this.cdnUrl = `${UPLOADCARE_CDN_URL}/${uuid}/${encodeURIComponent(filename)}`;
-        this.downloadUrl = `${UPLOADCARE_CDN_URL}/${uuid}/-/inline/no/${encodeURIComponent(
-            filename,
-        )}`;
+        this.cdnUrl = `${UPLOADCARE_CDN_URL}/${uuid}/${encodeURIComponent(this.filename)}`;
+        this.downloadUrl = `${UPLOADCARE_CDN_URL}/${uuid}/-/inline/no/${UploadcareFile.replaceForbiddenSymbols(this.filename)}`;
     }
 
     public get isImage() {
@@ -68,4 +66,8 @@ export class UploadcareFile {
         mime_type: this.mimeType,
         size: this.size,
     });
+
+    private static replaceForbiddenSymbols = (filename: string) => {
+        return filename.replace(/[/\\?%*:|"<>=]/g, '_');
+    };
 }
