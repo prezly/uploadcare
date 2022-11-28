@@ -1,9 +1,9 @@
 import type { FileInfo } from '@prezly/uploadcare-widget';
 import type { UploadedFile } from '@prezly/uploads';
 import { isUploadedFile } from '@prezly/uploads';
-import sanitizeFileName from 'sanitize-filename';
 
 import { UPLOADCARE_CDN_URL } from '../constants';
+import { normalizeFileName } from './normalizeFileName';
 
 interface UploadcareFileParameters {
     uuid: UploadedFile['uuid'];
@@ -53,7 +53,7 @@ export class UploadcareFile {
         this.size = size;
         this.mimeType = mimeType;
         this.cdnUrl = `${UPLOADCARE_CDN_URL}/${uuid}/${encodeURIComponent(this.filename)}`;
-        this.downloadUrl = `${UPLOADCARE_CDN_URL}/${uuid}/-/inline/no/${UploadcareFile.replaceForbiddenSymbols(
+        this.downloadUrl = `${UPLOADCARE_CDN_URL}/${uuid}/-/inline/no/${normalizeFileName(
             this.filename,
         )}`;
     }
@@ -69,8 +69,4 @@ export class UploadcareFile {
         mime_type: this.mimeType,
         size: this.size,
     });
-
-    private static replaceForbiddenSymbols = (filename: string) => {
-        return sanitizeFileName(filename, { replacement: '_' });
-    };
 }
