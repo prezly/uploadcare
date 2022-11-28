@@ -1,5 +1,6 @@
 export { awaitUploads } from './awaitUploads';
 export { isUploadcareImageSizeValid } from './isUploadcareImageSizeValid';
+export { normalizeFileName } from './normalizeFileName';
 export { toProgressPromise } from './toProgressPromise';
 export { UploadcareFile } from './UploadcareFile';
 export { UploadcareGifVideo } from './UploadcareGifVideo';

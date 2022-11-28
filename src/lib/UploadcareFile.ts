@@ -3,6 +3,7 @@ import type { UploadedFile } from '@prezly/uploads';
 import { isUploadedFile } from '@prezly/uploads';
 
 import { UPLOADCARE_CDN_URL } from '../constants';
+import { normalizeFileName } from './normalizeFileName';
 
 interface UploadcareFileParameters {
     uuid: UploadedFile['uuid'];
@@ -51,9 +52,9 @@ export class UploadcareFile {
         this.filename = filename;
         this.size = size;
         this.mimeType = mimeType;
-        this.cdnUrl = `${UPLOADCARE_CDN_URL}/${uuid}/${encodeURIComponent(filename)}`;
-        this.downloadUrl = `${UPLOADCARE_CDN_URL}/${uuid}/-/inline/no/${encodeURIComponent(
-            filename,
+        this.cdnUrl = `${UPLOADCARE_CDN_URL}/${uuid}/${encodeURIComponent(this.filename)}`;
+        this.downloadUrl = `${UPLOADCARE_CDN_URL}/${uuid}/-/inline/no/${normalizeFileName(
+            this.filename,
         )}`;
     }
 
