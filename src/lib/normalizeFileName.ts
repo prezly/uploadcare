@@ -1,6 +1,6 @@
 import sanitizeFileName from 'sanitize-filename';
 
-const forbiddenCharacters = /[% ]/g;
+const forbiddenCharacters = /[%]/g;
 const replacement = '_';
 
 export function normalizeFileName(filename: string) {
