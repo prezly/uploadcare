@@ -40,7 +40,7 @@ describe('UploadcareFile', function () {
 
         it('should provide a download CDN URL to download the file and replace forbidden characters', function () {
             expect(FILE_WITH_FORBIDDEN_SYMBOLS.downloadUrl).toEqual(
-                'https://cdn.uc.assets.prezly.com/00000000-0000-0000-0000-000000000000/-/inline/no/my__________docum_ent.pdf',
+                'https://cdn.uc.assets.prezly.com/00000000-0000-0000-0000-000000000000/-/inline/no/my__________docum ent.pdf',
             );
         });
     });
