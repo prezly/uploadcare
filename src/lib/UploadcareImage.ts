@@ -232,14 +232,15 @@ export class UploadcareImage {
     };
 
     public srcSet = (width: number): string => {
-        if (this.width < width * 2) {
-            return '';
+        const doubleWidth = width * 2;
+        const src1x = this.resize(width).cdnUrl;
+        const src2x = this.resize(doubleWidth).cdnUrl;
+
+        if (this.width < doubleWidth) {
+            return `${src1x} ${width}w`;
         }
 
-        const src1x = this.resize(width).cdnUrl;
-        const src2x = this.resize(width * 2).cdnUrl;
-
-        return `${src1x} 1x, ${src2x} 2x`;
+        return `${src1x} ${width}w, ${src2x} ${doubleWidth}w`;
     };
 
     public toPrezlyStoragePayload = (): UploadedImage => ({
