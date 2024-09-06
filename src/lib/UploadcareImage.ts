@@ -210,6 +210,21 @@ export class UploadcareImage {
         return this.withEffect(`/scale_crop/${width}x${height}/`);
     };
 
+    /**
+     * @see https://uploadcare.com/docs/transformations/image/resize-crop/#operation-smart-crop
+     */
+    public smartCrop = (
+        width: number,
+        height: number,
+        type: 'smart' | 'smart_faces_objects' | 'smart_faces_points' | 'smart_objects_faces_points' | 'smart_objects_faces' | 'smart_objects_points' | 'smart_points' | 'smart_objects' | 'smart_faces' = 'smart',
+        alignment?: 'center' | 'top' | 'right' | 'bottom' | 'left' | `${number}p,${number}p`,
+    ): UploadcareImage => {
+        if (alignment) {
+            return this.withEffect(`/scale_crop/${width}x${height}/${type}/${alignment}/`);
+        }
+        return this.withEffect(`/scale_crop/${width}x${height}/${type}/`);
+    };
+
     public toGifVideo = (): UploadcareGifVideo => {
         // The `gif2video` transformation is supported only for gifs,
         // otherwise the server responds with "400 Bad Request".
