@@ -268,7 +268,7 @@ export class UploadcareImage {
             caption: this.caption,
             baseCdnUrl,
         });
-    };
+    }
 
     public srcSet = (width: number): string => {
         const doubleWidth = width * 2;
