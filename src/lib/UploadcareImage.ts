@@ -68,6 +68,8 @@ export class UploadcareImage {
 
     public readonly effects: string[];
 
+    public readonly baseCdnUrl: string;
+
     constructor({
         uuid,
         filename,
@@ -77,6 +79,7 @@ export class UploadcareImage {
         originalHeight,
         effects = [],
         caption,
+        baseCdnUrl,
     }: {
         uuid: string;
         filename: string;
@@ -86,6 +89,7 @@ export class UploadcareImage {
         originalHeight: number;
         effects: string[];
         caption?: string;
+        baseCdnUrl?: string;
     }) {
         this.uuid = uuid;
         this.filename = filename;
@@ -94,6 +98,7 @@ export class UploadcareImage {
         this.originalWidth = originalWidth;
         this.originalHeight = originalHeight;
         this.effects = effects;
+        this.baseCdnUrl = baseCdnUrl || UPLOADCARE_CDN_URL;
 
         if (caption !== undefined) {
             this[UPLOADCARE_FILE_DATA_KEY] = { caption };
@@ -125,7 +130,7 @@ export class UploadcareImage {
 
     public get cdnUrl(): string {
         const cdnUrl = [
-            UPLOADCARE_CDN_URL,
+            this.baseCdnUrl,
             this.uuid,
             // Prepend a dash only if effects exist.
             // It doesn't matter if there's a dash at the end of URL even if there are no effects,
@@ -138,7 +143,7 @@ export class UploadcareImage {
 
     public get downloadUrl(): string {
         const downloadUrl = [
-            UPLOADCARE_CDN_URL,
+            this.baseCdnUrl,
             this.uuid,
             ['', ...this.effects, '/inline/no/'].join('-'),
         ].join('/');
@@ -247,6 +252,21 @@ export class UploadcareImage {
             size: this.size,
             width: this.originalWidth,
             height: this.originalHeight,
+            baseCdnUrl: this.baseCdnUrl,
+        });
+    };
+
+    public withBaseCdnUrl(baseCdnUrl: string): UploadcareImage {
+        return new UploadcareImage({
+            uuid: this.uuid,
+            filename: this.filename,
+            mimeType: this.mimeType,
+            size: this.size,
+            originalWidth: this.originalWidth,
+            originalHeight: this.originalHeight,
+            effects: this.effects,
+            caption: this.caption,
+            baseCdnUrl,
         });
     };
 
@@ -282,6 +302,8 @@ export class UploadcareImage {
             originalWidth: this.originalWidth,
             originalHeight: this.originalHeight,
             effects: [...this.effects, effect],
+            caption: this.caption,
+            baseCdnUrl: this.baseCdnUrl,
         });
     };
 }
