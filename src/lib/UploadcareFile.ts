@@ -10,6 +10,7 @@ interface UploadcareFileParameters {
     filename: UploadedFile['filename'];
     mimeType: UploadedFile['mime_type'];
     size: UploadedFile['size'];
+    baseCdnUrl?: string;
 }
 
 export class UploadcareFile {
@@ -47,19 +48,32 @@ export class UploadcareFile {
 
     public uuid: string;
 
-    public constructor({ filename, mimeType, size, uuid }: UploadcareFileParameters) {
+    public baseCdnUrl: string;
+
+    public constructor({ filename, mimeType, size, uuid, baseCdnUrl }: UploadcareFileParameters) {
         this.uuid = uuid;
         this.filename = filename;
         this.size = size;
         this.mimeType = mimeType;
-        this.cdnUrl = `${UPLOADCARE_CDN_URL}/${uuid}/${encodeURIComponent(this.filename)}`;
-        this.downloadUrl = `${UPLOADCARE_CDN_URL}/${uuid}/-/inline/no/${normalizeFileName(
+        this.baseCdnUrl = baseCdnUrl || UPLOADCARE_CDN_URL;
+        this.cdnUrl = `${this.baseCdnUrl}/${uuid}/${encodeURIComponent(this.filename)}`;
+        this.downloadUrl = `${this.baseCdnUrl}/${uuid}/-/inline/no/${normalizeFileName(
             this.filename,
         )}`;
     }
 
     public get isImage() {
         return this.mimeType.startsWith('image/');
+    }
+
+    public withBaseCdnUrl(baseCdnUrl: string): UploadcareFile {
+        return new UploadcareFile({
+            uuid: this.uuid,
+            filename: this.filename,
+            mimeType: this.mimeType,
+            size: this.size,
+            baseCdnUrl,
+        });
     }
 
     public toPrezlyStoragePayload = (): UploadedFile => ({

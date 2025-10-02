@@ -15,6 +15,8 @@ export class UploadcareGifVideo {
 
     public readonly effects: string[];
 
+    public readonly baseCdnUrl: string;
+
     public constructor(props: {
         uuid: string;
         filename: string;
@@ -23,6 +25,7 @@ export class UploadcareGifVideo {
         width: number;
         height: number;
         effects?: string[];
+        baseCdnUrl?: string;
     }) {
         if (props.mimeType !== 'image/gif') {
             throw new Error(`Only GIF images are allowed. Given: "${props.mimeType}".`);
@@ -35,6 +38,7 @@ export class UploadcareGifVideo {
         this.width = props.width;
         this.height = props.height;
         this.effects = props.effects ?? [];
+        this.baseCdnUrl = props.baseCdnUrl || UPLOADCARE_CDN_URL;
     }
 
     public format(format: 'mp4' | 'webm'): UploadcareGifVideo {
@@ -57,6 +61,19 @@ export class UploadcareGifVideo {
         return this.width / this.height;
     }
 
+    public withBaseCdnUrl(baseCdnUrl: string): UploadcareGifVideo {
+        return new UploadcareGifVideo({
+            uuid: this.uuid,
+            filename: this.filename,
+            mimeType: this.mimeType,
+            size: this.size,
+            width: this.width,
+            height: this.height,
+            effects: this.effects,
+            baseCdnUrl,
+        });
+    }
+
     private withEffect(effect: string): UploadcareGifVideo {
         return new UploadcareGifVideo({
             uuid: this.uuid,
@@ -66,12 +83,13 @@ export class UploadcareGifVideo {
             width: this.width,
             height: this.height,
             effects: [...this.effects, effect],
+            baseCdnUrl: this.baseCdnUrl,
         });
     }
 
     public get cdnUrl(): string {
         const cdnUrl = [
-            UPLOADCARE_CDN_URL,
+            this.baseCdnUrl,
             this.uuid,
             'gif2video',
             // Prepend a dash only if effects exist.
@@ -85,7 +103,7 @@ export class UploadcareGifVideo {
 
     public get downloadUrl(): string {
         const downloadUrl = [
-            UPLOADCARE_CDN_URL,
+            this.baseCdnUrl,
             this.uuid,
             'gif2video',
             ['', ...this.effects, '/inline/no/'].join('-'),
